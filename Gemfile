@@ -2,5 +2,5 @@
 
 source "https://rubygems.org"
 
-gem "esse", github: "marcosgz/esse", branch: "main"
+gem "esse", "~> 0.2.4"
 gemspec
