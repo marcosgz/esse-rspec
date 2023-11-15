@@ -52,7 +52,7 @@ require "spec_helper"
   end
 
   describe ".stub_esse_search" do
-    it "stubs the search method of the cluster" do
+    it "stubs the search method of with given cluster id and index" do
       cluster = Esse.cluster(:default)
       expect(cluster).to receive(:search).with("test", {q: "*"}).and_call_original # rubocop:disable RSpec/MessageSpies
       stub_esse_search(:default, "test", q: "*") do
@@ -62,6 +62,36 @@ require "spec_helper"
       query = cluster.search("test", q: "*")
       expect(query).to be_a(Esse::Search::Query)
       expect(query.response.total).to eq(1)
+    end
+
+    it "stubs the search method of with given index" do
+      cluster = Esse.cluster(:default)
+      expect(cluster).to receive(:search).with("test", {q: "*"}).and_call_original # rubocop:disable RSpec/MessageSpies
+      stub_esse_search("test", q: "*") do
+        {"hits" => {"total" => {"value" => 1}}}
+      end
+
+      query = cluster.search("test", q: "*")
+      expect(query).to be_a(Esse::Search::Query)
+      expect(query.response.total).to eq(1)
+    end
+
+    context "with a given index instance" do
+      before do
+        stub_esse_index(:products)
+      end
+
+      it "stubs the search method of with given index" do
+        cluster = ProductsIndex.cluster
+        expect(cluster).to receive(:search).with("products", {q: "*"}).and_call_original # rubocop:disable RSpec/MessageSpies
+        stub_esse_search(ProductsIndex, q: "*") do
+          {"hits" => {"total" => {"value" => 1}}}
+        end
+
+        query = cluster.search("products", q: "*")
+        expect(query).to be_a(Esse::Search::Query)
+        expect(query.response.total).to eq(1)
+      end
     end
   end
 end

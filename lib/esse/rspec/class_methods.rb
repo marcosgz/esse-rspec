@@ -17,8 +17,16 @@ module Esse
         stub_const(Esse::Hstring.new(name).camelize.to_s, klass)
       end
 
-      def stub_esse_search(cluster_name, *indexes, **definition)
-        cluster = Esse.cluster(cluster_name)
+      def stub_esse_search(*cluster_and_indexes, **definition)
+        cluster = if Esse.config.cluster_ids.include?(cluster_and_indexes.first)
+          Esse.cluster(cluster_and_indexes.shift)
+        elsif cluster_and_indexes.first.is_a?(Esse::Index)
+          cluster_and_indexes.first.cluster
+        else
+          Esse.cluster
+        end
+
+        indexes = cluster_and_indexes
         transport = cluster.api
         definition[:index] ||= Esse::Search::Query.normalize_indices(*indexes)
         response = yield
