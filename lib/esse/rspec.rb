@@ -10,6 +10,8 @@ module Esse
   end
 end
 
-::RSpec.configure do |config|
-  config.include Esse::RSpec::ClassMethods
+if defined?(::RSpec)
+  ::RSpec.configure do |config|
+    config.include Esse::RSpec::ClassMethods
+  end
 end

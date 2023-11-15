@@ -7,7 +7,9 @@ RSpec and testing support for [esse](https://github.com/marcosgz/esse)
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'esse-rspec'
+group :test do
+  gem 'esse-rspec'
+end
 ```
 
 And then execute:

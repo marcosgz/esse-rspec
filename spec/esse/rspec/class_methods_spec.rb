@@ -54,7 +54,7 @@ require "spec_helper"
   describe ".stub_esse_search" do
     it "stubs the search method of the cluster" do
       cluster = Esse.cluster(:default)
-      expect(cluster).to receive(:search).with("test", {q: "*"}).and_call_original
+      expect(cluster).to receive(:search).with("test", {q: "*"}).and_call_original # rubocop:disable RSpec/MessageSpies
       stub_esse_search(:default, "test", q: "*") do
         {"hits" => {"total" => {"value" => 1}}}
       end

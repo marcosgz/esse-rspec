@@ -1,3 +1,3 @@
 # frozen_string_literal: true
-
-require_relative "esse/rspec"
+#
+# does nothing, user should require `esse/rspec` manually instead

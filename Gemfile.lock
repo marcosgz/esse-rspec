@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    esse-rspec (0.0.2)
+    esse-rspec (0.0.3)
       esse (>= 0.2.4)
       rspec (>= 3)
 
