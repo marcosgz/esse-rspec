@@ -30,7 +30,7 @@ Gem::Specification.new do |spec|
   spec.require_paths = ["lib"]
 
   spec.add_dependency "esse", ">= 0.2.4"
-  spec.add_dependency "rspec", "~> 3.12"
+  spec.add_dependency "rspec", ">= 3"
   spec.add_development_dependency "pry"
   spec.add_development_dependency "standard", "~> 1.3"
   spec.add_development_dependency "rubocop", "~> 1.20"
