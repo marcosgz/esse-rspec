@@ -45,6 +45,12 @@ Stub a search request to an index with a non 200 response
 allow(ProductsIndex).to esse_receive_request(:search)
   .with(body: {query: {match_all: {}}, size: 10})
   .and_raise_http_status(500, {"error" => 'Something went wrong'})
+
+begin
+  ProductsIndex.search(query: {match_all: {}}, size: 10).response
+rescue Esse::Transport::InternalServerError => e
+  puts e.message # => {"error" => 'Something went wrong'}
+end
 ```
 
 Stub a cluster search request
