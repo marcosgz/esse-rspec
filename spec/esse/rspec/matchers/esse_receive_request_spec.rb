@@ -42,20 +42,20 @@ require "spec_helper"
     end
   end
 
-  describe "#with_status" do
+  describe "#and_raise_http_status" do
     it "initializes @error_class with the given status" do
-      matcher = described_class.new(:search).with_status(404)
+      matcher = described_class.new(:search).and_raise_http_status(404)
       expect(matcher.instance_variable_get(:@error_class)).to eq(Esse::Transport::NotFoundError)
     end
 
     it "initializes @response with the given response" do
-      matcher = described_class.new(:search).with_status(404, "foo")
+      matcher = described_class.new(:search).and_raise_http_status(404, "foo")
       expect(matcher.instance_variable_get(:@response)).to eq("foo")
     end
 
     it "returns self" do
       matcher = described_class.new(:search)
-      expect(matcher.with_status(404)).to be(matcher)
+      expect(matcher.and_raise_http_status(404)).to be(matcher)
     end
   end
 
@@ -219,7 +219,7 @@ require "spec_helper"
       end
 
       it "raises the transport error according to the given status" do
-        expect(cluster).to esse_receive_request(:search, index: "test", q: "*").with_status(404, error_msg = {"error" => "not found"})
+        expect(cluster).to esse_receive_request(:search, index: "test", q: "*").and_raise_http_status(404, error_msg = {"error" => "not found"})
         query = cluster.search("test", q: "*")
         expect {
           query.response

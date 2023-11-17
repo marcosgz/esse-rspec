@@ -78,7 +78,7 @@ module Esse
           self
         end
 
-        def with_status(status, response = nil)
+        def and_raise_http_status(status, response = nil)
           @error_class = STATUS_ERRORS[status] || Esse::Transport::ServerError
           @response = response if response
           self

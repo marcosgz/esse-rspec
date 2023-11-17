@@ -44,7 +44,7 @@ Stub a search request to an index with a non 200 response
 ```ruby
 allow(ProductsIndex).to esse_receive_request(:search)
   .with(body: {query: {match_all: {}}, size: 10})
-  .with_status(500, {"error" => 'Something went wrong'})
+  .and_raise_http_status(500, {"error" => 'Something went wrong'})
 ```
 
 Stub a cluster search request
