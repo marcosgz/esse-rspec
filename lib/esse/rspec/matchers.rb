@@ -73,22 +73,27 @@ module Esse
           receive_expected.matches?(transport)
         end
 
-        def with(**definition)
-          @definition.update(definition)
+        # @param definition [Hash]
+        def with(definition)
+          @definition.update(definition.transform_keys(&:to_sym))
           self
         end
 
+        # @param status [Integer] HTTP status code
+        # @param response [Hash, String, nil] response body
         def and_raise_http_status(status, response = nil)
           @error_class = STATUS_ERRORS[status] || Esse::Transport::ServerError
           @response = response if response
           self
         end
 
+        # @param response [Hash, String, nil] response body
         def and_return(response)
           @response = response
           self
         end
 
+        # @param error_class [Class] error class
         def and_raise(error_class, response = nil)
           @error_class = error_class
           @response = response if response
@@ -113,11 +118,13 @@ module Esse
           exactly(2)
         end
 
+        # @param times [Integer]
         def at_least(times)
           @at_least = times
           self
         end
 
+        # @param times [Integer]
         def at_most(times)
           @at_most = times
           self

@@ -40,6 +40,13 @@ require "spec_helper"
       matcher = described_class.new(:search, foo: :bar).with(bar: :baz)
       expect(matcher.instance_variable_get(:@definition)).to eq({foo: :bar, bar: :baz})
     end
+
+    context "when the given definition is a hash with string keys" do
+      it "symbolizes keys" do
+        matcher = described_class.new(:search).with("foo" => :bar)
+        expect(matcher.instance_variable_get(:@definition)).to eq({foo: :bar})
+      end
+    end
   end
 
   describe "#and_raise_http_status" do
