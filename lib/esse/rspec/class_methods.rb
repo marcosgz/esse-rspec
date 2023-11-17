@@ -17,21 +17,18 @@ module Esse
         stub_const(Esse::Hstring.new(name).camelize.to_s, klass)
       end
 
-      def stub_esse_search(*cluster_and_indexes, **definition)
-        cluster = if Esse.config.cluster_ids.include?(cluster_and_indexes.first)
-          Esse.cluster(cluster_and_indexes.shift)
-        elsif cluster_and_indexes.first.is_a?(Esse::Index)
-          cluster_and_indexes.first.cluster
-        else
-          Esse.cluster
+      def stub_esse_search(*cluster_and_indexes, **definition) # Let's deprecated this method
+        target = cluster_and_indexes.shift
+        if target.is_a?(Symbol) || target.is_a?(String) && Esse.config.cluster_ids.include?(target.to_sym)
+          target = Esse.cluster(target)
+          definition[:index] ||= Esse::Search::Query.normalize_indices(*cluster_and_indexes)
+        elsif target.is_a?(String) || target.is_a?(Symbol)
+          definition[:index] ||= Esse::Search::Query.normalize_indices(target.to_s)
+          target = Esse.cluster
         end
 
-        indexes = cluster_and_indexes
-        transport = cluster.api
-        definition[:index] ||= Esse::Search::Query.normalize_indices(*indexes)
         response = yield
-        allow(cluster).to receive(:api).and_return(transport)
-        allow(transport).to receive(:search).with(**definition).and_return(response)
+        expect(target).to esse_receive_request(:search).with(**definition).and_return(response)
       end
     end
   end
