@@ -31,7 +31,7 @@ require 'esse/rspec'
 Stub a search request to specific index and return a response
 
 ```ruby
-allow(ProductsIndex).to esse_receive_request(:search)
+expect(ProductsIndex).to esse_receive_request(:search)
   .with(body: {query: {match_all: {}}, size: 10})
   .and_return('hits' => { 'total' => 0, 'hits' => [] })
 
@@ -42,7 +42,7 @@ query.response.total # => 0
 Stub a search request to an index with a non 200 response
 
 ```ruby
-allow(ProductsIndex).to esse_receive_request(:search)
+expect(ProductsIndex).to esse_receive_request(:search)
   .with(body: {query: {match_all: {}}, size: 10})
   .and_raise_http_status(500, {"error" => 'Something went wrong'})
 
@@ -57,7 +57,7 @@ Stub a cluster search request
 
 ```ruby
 
-allow(Esse.cluster(:default)).to esse_receive_request(:search)
+expect(Esse.cluster(:default)).to esse_receive_request(:search)
   .with(index: 'geos_*', body: {query: {match_all: {}}, size: 10})
   .and_return('hits' => { 'total' => 0, 'hits' => [] })
 
@@ -68,7 +68,7 @@ query.response.total # => 0
 Stub a api/transport request
 
 ```ruby
-allow(Esse.cluster).to esse_receive_request(:get)
+expect(Esse.cluster).to esse_receive_request(:get)
   .with(id: '1', index: 'products')
   .and_return('_id' => '1', '_source' => {title: 'Product 1'})
 
