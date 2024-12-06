@@ -75,7 +75,12 @@ module Esse
 
         # @param definition [Hash]
         def with(definition)
-          @definition.update(definition.transform_keys(&:to_sym))
+          if definition.is_a?(Hash) && @definition.is_a?(Hash)
+            @definition.update definition.transform_keys(&:to_sym)
+          else
+            @definition = definition
+          end
+
           self
         end
 
@@ -162,7 +167,9 @@ module Esse
           if index_or_cluster.is_a?(Esse::Cluster)
             @cluster = index_or_cluster
           elsif index_or_cluster.is_a?(Class) && index_or_cluster < Esse::Index
-            @definition[:index] ||= Esse::Search::Query.normalize_indices(index_or_cluster)
+            if @definition.is_a?(Hash) && @definition[:index].nil?
+              @definition[:index] = Esse::Search::Query.normalize_indices(index_or_cluster)
+            end
             @cluster ||= index_or_cluster.cluster
           elsif index_or_cluster.is_a?(Symbol) || index_or_cluster.is_a?(String)
             if Esse.config.cluster_ids.include?(index_or_cluster.to_sym)
@@ -188,7 +195,7 @@ module Esse
 
         def receive_expected
           @receive_expected ||= begin
-            matcher = receive(@transport_method).with(**@definition)
+            matcher = receive(@transport_method).with(@definition)
             matcher = matcher.and_return(@response) if defined?(@response)
             matcher = matcher.and_raise(*[@error_class, @response].compact) if @error_class
             matcher = matcher.and_call_original if defined?(@and_call_original)

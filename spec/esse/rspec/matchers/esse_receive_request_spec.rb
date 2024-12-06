@@ -47,6 +47,13 @@ require "spec_helper"
         expect(matcher.instance_variable_get(:@definition)).to eq({foo: :bar})
       end
     end
+
+    context "when the given definition is a hash_including" do
+      it "sets the definition with the given value" do
+        matcher = described_class.new(:search).with(hash_including(foo: :bar))
+        expect(matcher.instance_variable_get(:@definition).description).to eq("hash_including(:foo=>:bar)")
+      end
+    end
   end
 
   describe "#and_raise_http_status" do
