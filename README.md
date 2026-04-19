@@ -2,6 +2,10 @@
 
 RSpec and testing support for [esse](https://github.com/marcosgz/esse)
 
+## Documentation
+
+Full guides, matcher reference, and API docs are published at **[gems.marcosz.com.br/esse-rspec](https://gems.marcosz.com.br/esse-rspec/)** — part of the [marcosgz Ruby gem catalogue](https://gems.marcosz.com.br).
+
 ## Installation
 
 Add this line to your application's Gemfile:
