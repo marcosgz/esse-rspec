@@ -11,7 +11,7 @@ Gem::Specification.new do |spec|
   spec.summary = "RSpec for Esse"
   spec.description = "RSpec for Esse"
   spec.homepage = "https://github.com/marcosgz/esse-rspec"
-  spec.license = "MIT"
+  spec.license = "GPL-3.0-or-later"
   spec.required_ruby_version = ">= 2.5.0"
 
   spec.metadata["homepage_uri"] = spec.homepage
